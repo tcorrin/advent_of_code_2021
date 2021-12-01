@@ -26,42 +26,31 @@ func load_file(filename string) []int {
 	return line_list
 }
 
-func part_one(depth_data []int) {
-
-	increase_count := 0
-
-	for index, depth_value := range depth_data {
-		if index > 0 {
-			if depth_value > depth_data[index-1] {
-				increase_count += 1
-			}
-		}
-	}
-
-	fmt.Println("Pt 1 - Number of increases: ", increase_count)
-}
-
-func part_two(depth_data []int) {
+func count_number_of_increases(depth_data []int, window_size int) {
 
 	increase_count := 0
 
 	for index, _ := range depth_data {
-		if index > 2 {
-			if calculate_window(depth_data, index) > calculate_window(depth_data, index-1) {
+		if index > window_size-1 {
+			if calculate_window(depth_data, index, window_size) > calculate_window(depth_data, index-1, window_size) {
 				increase_count += 1
 			}
 		}
 	}
 
-	fmt.Println("Pt 2 - Number of increases: ", increase_count)
+	fmt.Println("Number of increases: ", increase_count)
 }
 
-func calculate_window(depth_data []int, index int) int {
-	return depth_data[index] + depth_data[index-1] + depth_data[index-2]
+func calculate_window(depth_data []int, index int, window_size int) int {
+	result := 0
+	for x := 0; x < window_size; x++ {
+		result += depth_data[index-x]
+	}
+	return result
 }
 
 func main() {
 	depth_data := load_file("day_01/day_01.txt")
-	part_one(depth_data)
-	part_two(depth_data)
+	count_number_of_increases(depth_data, 1)
+	count_number_of_increases(depth_data, 3)
 }
